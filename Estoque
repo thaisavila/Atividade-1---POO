@@ -1,0 +1,155 @@
+# Variáveis globais de estoque
+
+estoque_comida = {
+    "sanduiche": 12,
+    "bolo": 6,
+    "pizza": 8,
+    "hamburguer": 10,
+    "salgado": 15,
+    "biscoito": 20,
+    "torta": 5,
+    "macarrao": 7,
+    "lasanha": 4,
+    "salada": 9
+}
+
+estoque_bebida = {
+    "agua": 25,
+    "refrigerante": 15,
+    "suco": 18,
+    "cafe": 20,
+    "cha": 10,
+    "vitamina": 8,
+    "leite": 12,
+    "cerveja": 14,
+    "vinho": 5,
+    "energetico": 9
+}
+
+def mostrar_estoque():
+  print("\n===Estoque Comida===")
+  for nome, quantidade in estoque_comida.items():
+    print(f"{nome}: {quantidade}")
+  print("\n===Estoque Bebida===")
+  for nome, quantidade in estoque_bebida.items():
+    print(f"{nome}: {quantidade}")
+
+def adicionar_produto(nome, quantidade):
+    """Adiciona um novo produto ao estoque de comida ou bebida."""
+    categoria = input("\nDeseja adicionar produto na categoria 'comida' ou 'bebida'? ").strip().lower()
+
+    if categoria == "comida":
+        if nome in estoque_comida:
+            estoque_comida[nome] += quantidade
+        else:
+            estoque_comida[nome] = quantidade
+    elif categoria == "bebida":
+        if nome in estoque_bebida:
+            estoque_bebida[nome] += quantidade
+        else:
+            estoque_bebida[nome] = quantidade
+    else:
+        print("Tipo inválido! Digite 'comida' ou 'bebida'.")
+
+def remover_produto(nome, quantidade):
+    """Remove certa quantidade do produto (se houver o suficiente)."""
+    categoria = input("\nDeseja remover produto de 'comida' ou 'bebida'? ").strip().lower()
+
+    if categoria == "comida":
+        if nome in estoque_comida:
+            if estoque_comida[nome] >= quantidade:
+                estoque_comida[nome] -= quantidade
+                if estoque_comida[nome] == 0:
+                    del estoque_comida[nome]
+            else:
+                print("Erro! Quantidade insuficiente no estoque")
+        else:
+            print("Erro! Esse produto não existe no estoque")
+    
+    elif categoria == "bebida":
+        if nome in estoque_bebida:
+            if estoque_bebida[nome] >= quantidade:
+                estoque_bebida[nome] -= quantidade
+                if estoque_bebida[nome] == 0:
+                    del estoque_bebida[nome]
+            else:
+                print("Erro! Quantidade insuficiente no estoque")
+        else:
+            print("Erro! Esse produto não existe no estoque")
+    else:
+        print("Erro! Digite 'comida' ou 'bebida' ")
+
+def consultar_produto(nome):
+    """Mostra a quantidade atual de um produto específico."""
+    categoria = input("\nDeseja consultar o produto em 'comida' ou 'bebida'? ").strip().lower()
+
+    if categoria == "comida":
+        if nome in estoque_comida:
+            print(f"{nome}: {estoque_comida[nome]}")
+        else:
+            print("Erro! Esse produto não existe no estoque de comida.")
+    elif categoria == "bebida":
+        if nome in estoque_bebida:
+            print(f"{nome}: {estoque_bebida[nome]}")
+        else:
+            print("Erro! Esse produto não encontrado no estoque de bebida.")
+    else:
+        print("Erro! Digite 'comida' ou 'bebida'.")
+
+def salvar_relatorio():
+    with open("estoque.txt", "w") as arquivo:
+        arquivo.write("Estoque Comida:\n")
+        for nome, quantidade in estoque_comida.items():
+            arquivo.write(f"{nome}: {quantidade}\n")
+
+        arquivo.write("\nEstoque Bebida:\n")
+        for nome, quantidade in estoque_bebida.items():
+            arquivo.write(f"{nome}: {quantidade}\n")
+
+def repor_automatico():
+    for nome, quantidade in estoque_comida.items():
+        if quantidade < 3:
+            estoque_comida[nome] += 5
+
+    for nome, quantidade in estoque_bebida.items():
+        if quantidade < 3:
+            estoque_bebida[nome] += 5
+
+def menu():
+    while True:
+        print("\nEscolha uma opção:")
+        print("1 - Mostrar estoque")
+        print("2 - Adicionar produto")
+        print("3 - Remover produto")
+        print("4 - Consultar produto")
+        print("5 - Salvar relatório")
+        print("6 - Repor automático")
+        print("7 - Sair")
+
+        opcao = input("Opção: ").strip()
+
+        if opcao == "1":
+            mostrar_estoque()
+        elif opcao == "2":
+            nome = input("Digite o nome do produto para adicionar: ")
+            quantidade = int(input("Digite a quantidade que deseja adicionar: "))
+            adicionar_produto(nome, quantidade)
+        elif opcao == "3":
+            nome = input("Digite o nome do produto para remover: ")
+            quantidade = int(input("Digite a quantidade que deseja remover: "))
+            remover_produto(nome, quantidade)
+        elif opcao == "4":
+            nome = input("Digite o nome do produto para consultar: ")
+            consultar_produto(nome)
+        elif opcao == "5":
+            salvar_relatorio()
+        elif opcao == "6":
+            repor_automatico()
+        elif opcao == "7":
+            print("Saindo...")
+            print("Obrigado por utilizar nosso sistema de estoque!")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+menu()
